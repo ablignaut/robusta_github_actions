@@ -1,0 +1,46 @@
+name: release-staging
+
+on:
+  pull_request:
+    types: closed
+    branches:
+      - staging
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: get tag
+        id: current_tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+
+      - name: create tag
+        uses: anothrNick/github-tag-action@1.36.0
+        id: create_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ steps.current_tag.outputs.tag }}.${{ github.base_ref }}
+
+      - name: create release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.create_tag.outputs.new_tag }}
+          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
+          generateReleaseNotes: true
+          prerelease: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: update pull request
+        uses: tzkhan/pr-update-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          base-branch-regex: '[a-z\d-_.\\/]+'
+          title-update-action: replace
+          title-template: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
+          body-update-action: 'prefix'
+          body-template: |
+            Merging into ${{ github.base_ref }}
