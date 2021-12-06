@@ -38,7 +38,7 @@ jobs:
           tag: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }}
           name: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }} | Release [${{ github.base_ref }}]
           generateReleaseNotes: false
-          body: Get PR body ${{ github.event.number }}
+          body: Get PR body ${{ github.event.body }}
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
