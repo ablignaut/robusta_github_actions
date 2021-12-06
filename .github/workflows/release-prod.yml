@@ -29,12 +29,12 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}
+          commit: ${{ steps.create_tag.outputs.new_tag }}
           name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
           generateReleaseNotes: false
           body: Get PR body ${{ github.event.number }}
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit: true
 
       - name: update pull request
         uses: tzkhan/pr-update-action@v2
