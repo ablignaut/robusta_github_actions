@@ -1,0 +1,6 @@
+- [ ] RPLUS-NUM
+- [ ] Contains migrations and `structure.sql` is final commit
+- [ ] I added awesome specs
+- [ ] I fixed Code Climate violations or made comments on exceptions
+- [ ] Ready for review
+- [ ] Tested workflow speed according to the [development load testing](https://wiki.statpro.com/display/RP/Development+Load+Testing) document
