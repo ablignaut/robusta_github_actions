@@ -16,7 +16,7 @@ jobs:
 
       - name: create tag
         uses: anothrNick/github-tag-action@1.36.0
-        id: create_tag
+        id: current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
@@ -25,17 +25,22 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
+      - name: create tag
+        uses: anothrNick/github-tag-action@1.36.0
+        id: create_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ steps.current_tag.outputs.new_tag }}.${{ github.base_ref }}
+
       - name: create release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }}
-          commit: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }}
           name: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }} | Release [${{ github.base_ref }}]
           generateReleaseNotes: false
           body: Get PR body ${{ github.event.number }}
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: update pull request
         uses: tzkhan/pr-update-action@v2

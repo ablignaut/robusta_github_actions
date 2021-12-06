@@ -23,13 +23,11 @@ jobs:
           RELEASE_BRANCHES: prod
           PRERELEASE_SUFFIX: rc
           WITH_V: true
-          DRY_RUN: true
 
       - name: create release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}
-          commit: ${{ steps.create_tag.outputs.new_tag }}
           name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
           generateReleaseNotes: false
           body: Get PR body ${{ github.event.number }}
