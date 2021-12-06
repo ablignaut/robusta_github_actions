@@ -23,15 +23,18 @@ jobs:
           RELEASE_BRANCHES: prod
           PRERELEASE_SUFFIX: rc
           WITH_V: true
+          DRY_RUN: true
 
       - name: create release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}
           name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
-          generateReleaseNotes: true
+          generateReleaseNotes: false
+          body: Get PR body ${{ github.event.number }}
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
+          commit: true
 
       - name: update pull request
         uses: tzkhan/pr-update-action@v2
