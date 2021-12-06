@@ -1,7 +1,7 @@
 changelog:
   categories:
   - title: Breaking Changes
-      labels:
+    labels:
     - Semver-Major
     - breaking-change
   - title: Exciting New Features
