@@ -22,6 +22,7 @@ pull_requests = `git log --oneline #{sha1}..#{sha2} | grep Merge | awk -F' ' '{p
 migrations = []
 
 pull_requests.reverse.each do |pr|
+  puts pr
   sha1, num = pr.split(' ')
 
   jira_pr = `git show --format=medium #{sha1}`.scrub.strip
@@ -59,13 +60,13 @@ puts message.readlines
 
 # create pull request in github
 
-print "\nCreate Pull Request (y/[n]): "
-user = $stdin.gets.strip
-
-unless user == 'y'
-  puts 'Aborting pull request'
-  exit
-end
+# print "\nCreate Pull Request (y/[n]): "
+# user = $stdin.gets.strip
+#
+# unless user == 'y'
+#   puts 'Aborting pull request'
+#   exit
+# end
 
 puts 'Creating pull request'
 
