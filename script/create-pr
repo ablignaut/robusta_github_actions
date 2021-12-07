@@ -1,10 +1,8 @@
 #!/usr/bin/env ruby
 
-class Test
-  def initialize
-    puts "I love India"
-  end
-end
+
+puts "I love India"
+
 
 # version = ARGV[0] || 'v68.4.rc1'
 # base = ARGV[1] || 'next'
