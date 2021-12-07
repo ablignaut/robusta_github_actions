@@ -30,35 +30,35 @@ jobs:
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
         run: ruby ./script/create-pr
 
-      - name: Create Pull Request
-        if: ${{ github.ref }} == 'edge'
+      - name: Create Next Pull Request
+        if: ${{ github.ref }} == 'refs/heads/edge'
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }} ${{ github.ref }}
+          body: ${{ steps.compile_pr.output }}
           get_diff: true
           source_branch: edge
           target_branch: next
 
-      - name: Create Pull Request
-        if: ${{ github.ref }} == 'next'
+      - name: Create Staging Pull Request
+        if: ${{ github.ref }} == 'refs/heads/next'
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }} ${{ github.ref }}
+          body: ${{ steps.compile_pr.output }}
           get_diff: true
           source_branch: next
           target_branch: staging
 
-      - name: Create Pull Request
-        if: ${{ github.ref }} == 'staging'
+      - name: Create Prod Pull Request
+        if: ${{ github.ref }} == 'refs/heads/staging'
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }} ${{ github.ref }}
+          body: ${{ steps.compile_pr.output }}
           get_diff: true
           source_branch: staging
           target_branch: prod
