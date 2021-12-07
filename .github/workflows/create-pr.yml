@@ -1,4 +1,4 @@
-name: create-pr-next
+name: create-pr
 
 on:
   workflow_dispatch:
