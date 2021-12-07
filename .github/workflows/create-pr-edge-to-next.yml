@@ -1,4 +1,4 @@
-name: create-pr-to
+name: create-pr-edge-to-next
 
 on:
   workflow_dispatch:
@@ -25,40 +25,17 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
-      - name: compile Pull Request
-        id: compile_pr
-#        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
-        run: ruby ./script/create-pr
+#      - name: compile Pull Request
+#        id: compile_pr
+##        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
+#        run: ruby ./script/create-pr
 
       - name: Create Next Pull Request
-        if: ${{ github.ref == 'refs/heads/next' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }}
+#          body: ${{ steps.compile_pr.output }}
           get_diff: true
           source_branch: edge
           target_branch: next
-
-      - name: Create Staging Pull Request
-        if: ${{ github.ref == 'refs/heads/staging' }}
-        uses: devops-infra/action-pull-request@v0.4.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Staging]
-          body: ${{ steps.compile_pr.output }}
-          get_diff: true
-          source_branch: next
-          target_branch: staging
-
-      - name: Create Prod Pull Request
-        if: ${{ github.ref == 'refs/heads/prod' }}
-        uses: devops-infra/action-pull-request@v0.4.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
-          body: ${{ steps.compile_pr.output }}
-          get_diff: true
-          source_branch: staging
-          target_branch: prod
