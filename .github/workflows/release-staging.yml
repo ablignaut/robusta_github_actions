@@ -1,12 +1,14 @@
 name: release-staging
 
 on:
-  push:
+  pull_request:
+    types: closed
     branches:
       - staging
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +39,7 @@ jobs:
           tag: ${{ steps.create_tag.outputs.new_tag }}
           name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
           generateReleaseNotes: false
-          body: PR body ${{ github.event.pull_request.body }}
+          body: ${{ github.event.pull_request.body }}
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
+
