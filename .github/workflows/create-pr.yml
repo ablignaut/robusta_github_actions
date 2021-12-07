@@ -23,7 +23,7 @@ jobs:
       - name: Create Pull Request
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
         run: |
-          echo ::set-env name=PR_BODY::$(ruby ./script/create-pr)
+          echo ::set-env name=PR_BODY::${{ ruby ./script/create-pr }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
