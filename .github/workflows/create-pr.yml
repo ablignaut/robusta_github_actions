@@ -10,9 +10,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+#      - uses: actions/setup-ruby@v1
+#        with:
+#          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
       - name: create Tag
         uses: anothrNick/github-tag-action@1.36.0
@@ -36,7 +36,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }}
+          body: ${{ steps.compile_pr.output }} ${{ github.ref }}
           get_diff: true
           source_branch: edge
           target_branch: next
@@ -47,7 +47,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }}
+          body: ${{ steps.compile_pr.output }} ${{ github.ref }}
           get_diff: true
           source_branch: next
           target_branch: staging
@@ -58,7 +58,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }}
+          body: ${{ steps.compile_pr.output }} ${{ github.ref }}
           get_diff: true
           source_branch: staging
           target_branch: prod
