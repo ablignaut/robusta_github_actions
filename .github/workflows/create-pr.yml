@@ -2,12 +2,6 @@ name: create-pr
 
 on:
   workflow_dispatch:
-    inputs:
-
-      branch:
-        description: Branch
-        required: true
-        type: string
 
 jobs:
   build:
@@ -28,11 +22,8 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
-
       - name: Create Pull Request
-        uses: actions/checkout@master
         run: ruby -r ./script/create-pr.rb ${{ steps.create_tag.outputs.new_tag }} next edge
-
 
 
 #      - name: Create Pull Request
