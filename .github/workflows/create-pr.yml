@@ -1,4 +1,4 @@
-name: create-pr-staging-to-prod
+name: create-pr
 
 on:
   workflow_dispatch:
