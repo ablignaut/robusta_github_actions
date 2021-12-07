@@ -14,13 +14,13 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: create tag
+      - name: current tag
         uses: anothrNick/github-tag-action@1.36.0
         id: current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod, staging
+          RELEASE_BRANCHES: prod,staging
           PRERELEASE_SUFFIX: rc
           WITH_V: true
           DRY_RUN: true
@@ -35,8 +35,8 @@ jobs:
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }}
-          name: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }} | Release [${{ github.base_ref }}]
+          tag: ${{ steps.create_tag.outputs.new_tag }}
+          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
           generateReleaseNotes: false
           body: PR body ${{ github.event.pull_request.body }}
           prerelease: true
