@@ -14,10 +14,7 @@ jobs:
         with:
           ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
-
-
-
-      - name: create tag
+      - name: create Tag
         uses: anothrNick/github-tag-action@1.36.0
         id: create_tag
         env:
@@ -38,8 +35,30 @@ jobs:
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_branch: edge
-          target_branch: next
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: ${{ steps.compile_pr.output }}
           get_diff: true
+          source_branch: edge
+          target_branch: next
+
+      - name: Create Pull Request
+        if: ${{ github.ref }} == 'next'
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          body: ${{ steps.compile_pr.output }}
+          get_diff: true
+          source_branch: next
+          target_branch: staging
+
+      - name: Create Pull Request
+        if: ${{ github.ref }} == 'staging'
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          body: ${{ steps.compile_pr.output }}
+          get_diff: true
+          source_branch: staging
+          target_branch: prod
