@@ -34,7 +34,7 @@ jobs:
         run: ruby ./script/create-pr
 
       - name: Create Pull Request
-        if: ${{ github.ref } == 'edge'
+        if: ${{ github.ref }} == 'edge'
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
