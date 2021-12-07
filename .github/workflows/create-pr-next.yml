@@ -20,6 +20,7 @@ jobs:
           RELEASE_BRANCHES: prod
           PRERELEASE_SUFFIX: rc
           WITH_V: true
+          DRY_RUN: true
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
