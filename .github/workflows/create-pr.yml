@@ -29,6 +29,8 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
+          branch: edge
+          base: next
 ##          token: ${{ secrets.PAT }}
 #          commit-message: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
 #          committer: GitHub <noreply@github.com>
@@ -36,7 +38,7 @@ jobs:
 #          signoff: false
 #          branch: ${{ inputs.branch }}
 #          delete-branch: false
-#          title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: |
             ${{ steps.create_pr.body }}
 #
