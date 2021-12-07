@@ -1,4 +1,4 @@
-name: create-pr
+name: create-pr-from
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
         run: ruby ./script/create-pr
 
       - name: Create Next Pull Request
-        if: ${{ github.ref == 'refs/heads/edge' }}
+        if: ${{ github.ref == 'refs/heads/next' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
           target_branch: next
 
       - name: Create Staging Pull Request
-        if: ${{ github.ref == 'refs/heads/next' }}
+        if: ${{ github.ref == 'refs/heads/staging' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +53,7 @@ jobs:
           target_branch: staging
 
       - name: Create Prod Pull Request
-        if: ${{ github.ref == 'refs/heads/staging' }}
+        if: ${{ github.ref == 'refs/heads/prod' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
