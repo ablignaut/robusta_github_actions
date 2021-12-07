@@ -23,7 +23,8 @@ jobs:
           DRY_RUN: true
 
       - name: Create Pull Request
-        run: ruby -r ./script/create-pr.rb ${{ steps.create_tag.outputs.new_tag }} next edge
+        run: ruby -e 'p `ls`.split("\n")'
+#        run: ruby -r ./script/create-pr.rb ${{ steps.create_tag.outputs.new_tag }} next edge
 
 
 #      - name: Create Pull Request
