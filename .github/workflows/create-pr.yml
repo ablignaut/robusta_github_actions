@@ -21,7 +21,7 @@ jobs:
           DRY_RUN: true
 
       - name: Create Pull Request
-        run: ruby ./script/create-pr
+        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
 
 
 #      - name: Create Pull Request
