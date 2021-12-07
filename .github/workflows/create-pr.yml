@@ -40,8 +40,8 @@ jobs:
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
 #          template: .github/PULL_REQUEST_TEMPLATE.md
           body: ${{ steps.compile_pr.output }}
-          reviewer: octocat
-          assignee: octocat
+#          reviewer: octocat
+#          assignee: octocat
 #          label: enhancement
 #          milestone: My milestone
 #          draft: true
