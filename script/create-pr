@@ -69,7 +69,11 @@ puts message.readlines
 
 puts 'Creating pull request'
 
-%x(gh auth login)
-%x(gh pr create -F #{message.path} -B #{base} -H #{head} -t '#{pr_title}' -w)
+output = [pr_title, message.path]
+
+# %x(gh auth login)
+# %x(gh pr create -F #{message.path} -B #{base} -H #{head} -t '#{pr_title}' -w)
 
 message.close
+
+output
