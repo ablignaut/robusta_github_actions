@@ -29,29 +29,21 @@ jobs:
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
         run: ruby ./script/create-pr
 
-
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: devops-infra/action-pull-request@v0.4.2
         with:
-          branch: edge
-          base: next
-##          token: ${{ secrets.PAT }}
-#          commit-message: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-#          committer: GitHub <noreply@github.com>
-#          author: ${{ github.actor }} <${{ github.actor }} @users.noreply.github.com>
-#          signoff: false
-#          branch: ${{ inputs.branch }}
-#          delete-branch: false
-          title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: |
-            ${{ steps.compile_pr.output }}
-#
-#          labels: |
-#            automated pr
-##          assignees: peter-evans
-##          reviewers: peter-evans
-##          team-reviewers: |
-##            owners
-##            maintainers
-##          milestone: 1
-##          draft: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: edge
+          target_branch: next
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+#          template: .github/PULL_REQUEST_TEMPLATE.md
+          body: ${{ steps.compile_pr.output }}
+          reviewer: octocat
+          assignee: octocat
+#          label: enhancement
+#          milestone: My milestone
+#          draft: true
+#          old_string: "<!-- Add your description here -->"
+#          new_string: "** Automatic pull request**"
+          get_diff: true
+          ignore_users: "dependabot"
