@@ -21,9 +21,10 @@ jobs:
           DRY_RUN: true
 
       - name: Create Pull Request
+        id: create_pr
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
         run: |
-          echo ::set-env name=PR_BODY::${{ ruby ./script/create-pr }}
+          echo "::set-output name=body::$( ruby ./script/create-pr )"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -37,7 +38,7 @@ jobs:
 #          delete-branch: false
 #          title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: |
-            ${{ env.PR_BODY }}
+            ${{ create_pr.body }}
 #
 #          labels: |
 #            automated pr
