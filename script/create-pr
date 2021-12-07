@@ -4,7 +4,7 @@
 require 'tempfile'
 
 version = ARGV[0] || 'v68.4.rc1'
-base = ARGV[1] || 'next-eu'
+base = ARGV[1] || 'next'
 head = ARGV[2] || 'edge'
 
 sha1 = base
