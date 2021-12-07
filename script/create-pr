@@ -1,59 +1,65 @@
 #!/usr/bin/env ruby
 
-version = ARGV[0] || 'v68.4.rc1'
-base = ARGV[1] || 'next'
-head = ARGV[2] || 'edge'
-
-sha1 = base
-sha2 = head
-
-prev_sha1 = sha1
-
-
-
-pr_title = "#{version} | Release [#{base}]"
-
-
-pull_requests = `git log --oneline #{sha1}..#{sha2} | grep Merge | awk -F' ' '{print $1,$5}'`.split(/\n/)
-
-migrations = []
-
-pull_requests.reverse.each do |pr|
-  sha1, num = pr.split(' ')
-
-  jira_pr = `git show --format=medium #{sha1}`.scrub.strip
-  matches = jira_pr.split("\n").last.match(/(RPLUS|FEATURE)[\s-]([^\s]+)([\s\|]+)(.+)/i)
-
-  next unless matches
-
-  jira    = "RPLUS-#{matches[2]}"
-  desc    = matches[4].strip
-
-  commits = `git diff --name-only #{sha1} #{prev_sha1} | grep migrate`.split(/\n/)
-  has_migrations = commits.length > 0
-  migrations << "#{sha1}\t#{num}\t#{commits.length} migration(s)" if has_migrations
-
-
-
-  prev_sha1 = sha1
+class Test
+  def initialize
+    puts "I love India"
+  end
 end
 
-
-
-
-puts "#{pr_title}\n"
-
-# create pull request in github
-
-print "\nCreate Pull Request (y/[n]): "
-user = $stdin.gets.strip
-
-unless user == 'y'
-  puts 'Aborting pull request'
-  exit
-end
-
-puts 'Creating pull request'
-
-%x(gh pr create -F #{pull_requests} -B #{base} -H #{head} -t '#{pr_title}' -w)
+# version = ARGV[0] || 'v68.4.rc1'
+# base = ARGV[1] || 'next'
+# head = ARGV[2] || 'edge'
+#
+# sha1 = base
+# sha2 = head
+#
+# prev_sha1 = sha1
+#
+#
+#
+# pr_title = "#{version} | Release [#{base}]"
+#
+#
+# pull_requests = `git log --oneline #{sha1}..#{sha2} | grep Merge | awk -F' ' '{print $1,$5}'`.split(/\n/)
+#
+# migrations = []
+#
+# pull_requests.reverse.each do |pr|
+#   sha1, num = pr.split(' ')
+#
+#   jira_pr = `git show --format=medium #{sha1}`.scrub.strip
+#   matches = jira_pr.split("\n").last.match(/(RPLUS|FEATURE)[\s-]([^\s]+)([\s\|]+)(.+)/i)
+#
+#   next unless matches
+#
+#   jira    = "RPLUS-#{matches[2]}"
+#   desc    = matches[4].strip
+#
+#   commits = `git diff --name-only #{sha1} #{prev_sha1} | grep migrate`.split(/\n/)
+#   has_migrations = commits.length > 0
+#   migrations << "#{sha1}\t#{num}\t#{commits.length} migration(s)" if has_migrations
+#
+#
+#
+#   prev_sha1 = sha1
+# end
+#
+#
+#
+#
+# puts "#{pr_title}\n"
+#
+# # create pull request in github
+#
+# print "\nCreate Pull Request (y/[n]): "
+# user = $stdin.gets.strip
+#
+# unless user == 'y'
+#   puts 'Aborting pull request'
+#   exit
+# end
+#
+# puts 'Creating pull request'
+#
+# %x(gh pr create -F #{pull_requests} -B #{base} -H #{head} -t '#{pr_title}' -w)
 
