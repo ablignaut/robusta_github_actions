@@ -3,8 +3,8 @@
 # requires the github cli https://cli.github.com/manual/
 require 'tempfile'
 
-base = ARGV[1] || 'next'
-head = ARGV[2] || 'edge'
+base = ARGV[0] || 'next'
+head = ARGV[1] || 'edge'
 
 sha1 = base
 sha2 = head

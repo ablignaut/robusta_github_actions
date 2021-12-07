@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+
 
       - name: create tag
         uses: anothrNick/github-tag-action@1.36.0
@@ -20,11 +24,11 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
-      - name: Create Pull Request
-        id: create_pr
+      - name: compile Pull Request
+        id: compile_pr
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
-        run: |
-          echo "::set-output name=body::$( ruby ./script/create-pr )"
+        run: ruby ./script/create-pr
+
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -40,7 +44,7 @@ jobs:
 #          delete-branch: false
           title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: |
-            ${{ steps.create_pr.body }}
+            ${{ steps.compile_pr.output }}
 #
 #          labels: |
 #            automated pr
