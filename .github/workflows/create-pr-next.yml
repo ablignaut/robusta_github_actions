@@ -6,8 +6,7 @@ on:
       base:
         description: Base
         required: true
-
-
+        type: string
 
 jobs:
   build:
