@@ -1,7 +1,12 @@
 name: create-pr-next
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      base:
+        description: Base
+        required: true
+        type: string
 
 jobs:
   build:
@@ -30,8 +35,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }} @users.noreply.github.com>
           signoff: false
-          branch: edge
-          base: next
+          base: ${{ inputs.base }}
           delete-branch: false
           title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: |
