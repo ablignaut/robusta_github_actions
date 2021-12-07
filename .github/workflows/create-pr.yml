@@ -1,4 +1,4 @@
-name: create-pr-${{ github.ref }}
+name: create-pr
 
 on:
   workflow_dispatch:
