@@ -33,8 +33,8 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          branch: next
-          base: edge
+          branch: edge
+          base: next
           delete-branch: false
           title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: |
