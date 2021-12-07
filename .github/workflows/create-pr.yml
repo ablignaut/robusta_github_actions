@@ -29,7 +29,6 @@ jobs:
 
 
       - name: Create Pull Request
-        uses: actions/checkout@master
         run: ruby -r ./script/create-pr.rb ${{ steps.create_tag.outputs.new_tag }} next edge
 
 
