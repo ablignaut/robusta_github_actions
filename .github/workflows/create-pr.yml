@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod
+          RELEASE_BRANCHES: prod,staging
           PRERELEASE_SUFFIX: rc
           WITH_V: true
           DRY_RUN: true
