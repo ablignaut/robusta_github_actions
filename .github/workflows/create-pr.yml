@@ -1,4 +1,4 @@
-name: create-pr
+name: create-pr-${{ github.ref }}
 
 on:
   workflow_dispatch:
@@ -46,7 +46,7 @@ jobs:
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Staging]
           body: ${{ steps.compile_pr.output }}
           get_diff: true
           source_branch: next
@@ -57,7 +57,7 @@ jobs:
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
           body: ${{ steps.compile_pr.output }}
           get_diff: true
           source_branch: staging
