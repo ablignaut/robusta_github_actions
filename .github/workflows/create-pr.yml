@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
 
       - name: create tag
         uses: anothrNick/github-tag-action@1.36.0
@@ -23,7 +21,6 @@ jobs:
           DRY_RUN: true
 
       - name: Create Pull Request
-        uses: actions/checkout@v2
         run: ruby -r ./script/create-pr.rb '${{ steps.create_tag.outputs.new_tag }}' next edge
 
 
