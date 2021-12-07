@@ -23,6 +23,7 @@ jobs:
           DRY_RUN: true
 
       - name: Create Pull Request
+        uses: actions/checkout@v2
         run: ruby -r ./script/create-pr.rb '${{ steps.create_tag.outputs.new_tag }}' next edge
 
 
