@@ -50,7 +50,7 @@ message.rewind
 
 puts message.readlines
 puts
-output =  message.path
+output =  message.readlines
 puts output
 
 message.close
