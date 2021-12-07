@@ -3,9 +3,8 @@
 # requires the github cli https://cli.github.com/manual/
 require 'tempfile'
 
-version = ARGV[0] || 'v68.4.rc1'
-base = ARGV[1] || 'next-eu'
-head = ARGV[2] || 'edge'
+base = ARGV[0] || 'next'
+head = ARGV[1] || 'edge'
 
 sha1 = base
 sha2 = head
@@ -13,12 +12,8 @@ sha2 = head
 prev_sha1 = sha1
 
 message = Tempfile.new('pull-request-message')
-
-pr_title = "#{version} | Release [#{base}]"
 message.write "### Displaying all Pull Requests between #{base} and #{head}\n"
-
 pull_requests = `git log --oneline #{sha1}..#{sha2} | grep Merge | awk -F' ' '{print $1,$5}'`.split(/\n/)
-
 migrations = []
 
 pull_requests.reverse.each do |pr|
@@ -41,7 +36,6 @@ pull_requests.reverse.each do |pr|
   else
     message.write "#{sha1}\t#{num}#{has_migrations ? ' *' : '  '}\t#{jira} _#{desc}_\n"
   end
-
   prev_sha1 = sha1
 end
 
@@ -54,21 +48,11 @@ message.flush
 
 message.rewind
 
-puts "#{pr_title}\n"
 puts message.readlines
-
-# create pull request in github
-
-print "\nCreate Pull Request (y/[n]): "
-user = $stdin.gets.strip
-
-unless user == 'y'
-  puts 'Aborting pull request'
-  exit
-end
-
-puts 'Creating pull request'
-
-%x(gh pr create -F #{message.path} -B #{base} -H #{head} -t '#{pr_title}' -w)
+puts
+output =  message.readlines
+puts output
 
 message.close
+puts 'close'
+output
