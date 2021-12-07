@@ -24,12 +24,12 @@ jobs:
           PRERELEASE_SUFFIX: rc
           WITH_V: true
 
-#      - name: create release
-#        uses: ncipollo/release-action@v1
-#        with:
-#          tag: ${{ steps.create_tag.outputs.new_tag }}
-#          name: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-#          generateReleaseNotes: false
-#          body: PR body ${{ github.event.pull_request.body }}
-#          prerelease: true
-#          token: ${{ secrets.GITHUB_TOKEN }}
+     - name: create release
+       uses: ncipollo/release-action@v1
+       with:
+         tag: ${{ steps.create_tag.outputs.new_tag }}
+         name: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+         generateReleaseNotes: false
+         body: PR body ${{ github.event.pull_request.body }}
+         prerelease: true
+         token: ${{ secrets.GITHUB_TOKEN }}
