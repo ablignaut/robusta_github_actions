@@ -48,7 +48,7 @@ jobs:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           base-branch-regex: '[a-z\d-_.\\/]+'
           title-update-action: replace
-          title-template: ${{ steps.create_tag.outputs.new_tag }}.${{ github.base_ref }} | Release [${{ github.base_ref }}]
+          title-template: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
           body-update-action: 'prefix'
           body-template: |
             Merging into ${{ github.base_ref }}
