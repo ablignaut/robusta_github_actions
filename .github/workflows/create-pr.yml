@@ -38,7 +38,7 @@ jobs:
 #          delete-branch: false
 #          title:  ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
           body: |
-            ${{ create_pr.body }}
+            ${{ steps.create_pr.body }}
 #
 #          labels: |
 #            automated pr
