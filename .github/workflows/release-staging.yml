@@ -1,8 +1,7 @@
 name: release-staging
 
 on:
-  pull_request:
-    types: closed
+  push:
     branches:
       - staging
 
@@ -41,14 +40,3 @@ jobs:
           body: PR body ${{ github.event.pull_request.body }}
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: update pull request
-        uses: tzkhan/pr-update-action@v2
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          base-branch-regex: '[a-z\d-_.\\/]+'
-          title-update-action: replace
-          title-template: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
-          body-update-action: 'prefix'
-          body-template: |
-            Merging into ${{ github.base_ref }}

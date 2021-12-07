@@ -10,12 +10,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
+#      - uses: actions/setup-ruby@v1
+#        with:
+#          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
-
-      - name: create tag
+      - name: create Tag
         uses: anothrNick/github-tag-action@1.36.0
         id: create_tag
         env:
@@ -31,21 +30,35 @@ jobs:
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
         run: ruby ./script/create-pr
 
-      - name: Create Pull Request
+      - name: Create Next Pull Request
+        if: ${{ github.ref }} == 'refs/heads/edge'
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          body: ${{ steps.compile_pr.output }}
+          get_diff: true
           source_branch: edge
           target_branch: next
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-#          template: .github/PULL_REQUEST_TEMPLATE.md
+
+      - name: Create Staging Pull Request
+        if: ${{ github.ref }} == 'refs/heads/next'
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Staging]
           body: ${{ steps.compile_pr.output }}
-#          reviewer: octocat
-#          assignee: octocat
-#          label: enhancement
-#          milestone: My milestone
-#          draft: true
-#          old_string: "<!-- Add your description here -->"
-#          new_string: "** Automatic pull request**"
           get_diff: true
-          ignore_users: "dependabot"
+          source_branch: next
+          target_branch: staging
+
+      - name: Create Prod Pull Request
+        if: ${{ github.ref }} == 'refs/heads/staging'
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
+          body: ${{ steps.compile_pr.output }}
+          get_diff: true
+          source_branch: staging
+          target_branch: prod
