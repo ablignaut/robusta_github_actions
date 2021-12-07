@@ -44,7 +44,7 @@ jobs:
 #          assignee: octocat
 #          label: enhancement
 #          milestone: My milestone
-#          draft: true
+          draft: true
 #          old_string: "<!-- Add your description here -->"
 #          new_string: "** Automatic pull request**"
           get_diff: true
