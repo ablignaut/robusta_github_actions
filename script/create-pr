@@ -1,0 +1,74 @@
+#!/usr/bin/env ruby
+
+# requires the github cli https://cli.github.com/manual/
+require 'tempfile'
+
+version = ARGV[0] || 'v68.4.rc1'
+base = ARGV[1] || 'next-eu'
+head = ARGV[2] || 'edge'
+
+sha1 = base
+sha2 = head
+
+prev_sha1 = sha1
+
+message = Tempfile.new('pull-request-message')
+
+pr_title = "#{version} | Release [#{base}]"
+message.write "### Displaying all Pull Requests between #{base} and #{head}\n"
+
+pull_requests = `git log --oneline #{sha1}..#{sha2} | grep Merge | awk -F' ' '{print $1,$5}'`.split(/\n/)
+
+migrations = []
+
+pull_requests.reverse.each do |pr|
+  sha1, num = pr.split(' ')
+
+  jira_pr = `git show --format=medium #{sha1}`.scrub.strip
+  matches = jira_pr.split("\n").last.match(/(RPLUS|FEATURE)[\s-]([^\s]+)([\s\|]+)(.+)/i)
+
+  next unless matches
+
+  jira    = "RPLUS-#{matches[2]}"
+  desc    = matches[4].strip
+
+  commits = `git diff --name-only #{sha1} #{prev_sha1} | grep migrate`.split(/\n/)
+  has_migrations = commits.length > 0
+  migrations << "#{sha1}\t#{num}\t#{commits.length} migration(s)" if has_migrations
+
+  if matches[2].to_i.nonzero?
+    message.write "#{sha1}\t#{num}#{has_migrations ? ' *' : '  '}\t[#{jira}](https://jira.confluence.com/browse/#{jira}) _#{desc}_\n"
+  else
+    message.write "#{sha1}\t#{num}#{has_migrations ? ' *' : '  '}\t#{jira} _#{desc}_\n"
+  end
+
+  prev_sha1 = sha1
+end
+
+message.write "### Migrations\n"
+message.write "None\n" if migrations.empty?
+
+migrations.each { |m| message.write "#{m}\n" }
+
+message.flush
+
+message.rewind
+
+puts "#{pr_title}\n"
+puts message.readlines
+
+# create pull request in github
+
+print "\nCreate Pull Request (y/[n]): "
+user = $stdin.gets.strip
+
+unless user == 'y'
+  puts 'Aborting pull request'
+  exit
+end
+
+puts 'Creating pull request'
+
+%x(gh pr create -F #{message.path} -B #{base} -H #{head} -t '#{pr_title}' -w)
+
+message.close
