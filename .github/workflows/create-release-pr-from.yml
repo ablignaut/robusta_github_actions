@@ -13,7 +13,7 @@ jobs:
 
       - name: context
         id: context
-        run:
+        run: |
           case github.ref in
           'refs/heads/edge')
             echo "::set-output name=base::'next'"
@@ -28,7 +28,7 @@ jobs:
             echo "::set-output name=head::'staging'"
           ;;
           *) 
-            Default condition to be executed 
+            echo "Invalid option!" && exit 1
           ;;
           esac
 
