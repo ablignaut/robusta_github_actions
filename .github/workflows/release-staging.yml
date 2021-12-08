@@ -18,7 +18,7 @@ jobs:
           fetch-depth: '0'
 
       - name: current tag
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: FritzViljoen/github-tag-action@1.36.0
         id: current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,7 +29,7 @@ jobs:
           DRY_RUN: true
 
       - name: create tag
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: FritzViljoen/github-tag-action@1.36.0
         id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
