@@ -15,10 +15,21 @@ jobs:
         id: context
         run:
           case github.ref in
-          'refs/heads/edge')    echo "::set-output name=base::'next'    name=head::'edge'" ;;
-          'refs/heads/next')    echo "::set-output name=base::'staging' name=head::'next'" ;;
-          'refs/heads/staging') echo "::set-output name=base::'prod'    name=head::'staging'" ;;
-          *) Default condition to be executed ;;
+          'refs/heads/edge')
+            echo "::set-output name=base::'next'"
+            echo "::set-output name=head::'edge'"
+          ;;
+          'refs/heads/next')
+            echo "::set-output name=base::'staging'"
+            echo "::set-output name=head::'next'"
+          ;;
+          'refs/heads/staging')
+            echo "::set-output name=base::'prod'"
+            echo "::set-output name=head::'staging'"
+          ;;
+          *) 
+            Default condition to be executed 
+          ;;
           esac
 
       - name: create tag
