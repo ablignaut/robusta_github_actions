@@ -17,21 +17,21 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - run: |
+          echo "::set-output name=tag::"${{ github.event.pull_request.title }}" | cut -d' ' -f 1
+
       - name: create tag
         uses: FritzViljoen/github-tag-action@1.36.1
         id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod,staging
-          PRERELEASE_SUFFIX: rc
-          WITH_V: true
+          CUSTOM_TAG: ${{ steps.outputs.tag }}
 
       - name: create release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}
-          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ GITHUB_REF##*/ }}]
+          name: ${{ steps.create_tag.outputs.new_tag }} | Release [prod]
           generateReleaseNotes: false
           body: ${{ github.event.pull_request.body }}
           prerelease: false
