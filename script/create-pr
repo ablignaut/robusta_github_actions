@@ -13,7 +13,7 @@ prev_sha1 = sha1
 
 message = Tempfile.new('pull-request-message')
 message.write "### Displaying all Pull Requests between #{base} and #{head}\n"
-pull_requests = `git log --oneline #{sha1}..#{sha2} | grep Merge | awk -F' ' '{print $1,$5}'`.split(/\n/)
+pull_requests = `git log --oneline origin/#{sha1}..origin/#{sha2} | grep Merge | awk -F' ' '{print $1,$5}'`.split(/\n/)
 migrations = []
 
 pull_requests.reverse.each do |pr|
