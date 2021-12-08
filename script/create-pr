@@ -3,11 +3,11 @@
 # requires the github cli https://cli.github.com/manual/
 require 'tempfile'
 
-base = "origin/#{ARGV[0] || 'next'}"
-head = "origin/#{ARGV[1] || 'edge'}"
+base = ARGV[0] || 'next'
+head = ARGV[1] || 'edge'
 
-sha1 = base
-sha2 = head
+sha1 = "origin/#{base}"
+sha2 = "origin/#{head}"
 
 prev_sha1 = sha1
 
