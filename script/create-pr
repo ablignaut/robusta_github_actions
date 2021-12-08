@@ -6,8 +6,8 @@ require 'tempfile'
 base = ARGV[0] || 'next'
 head = ARGV[1] || 'edge'
 
-sha1 = base
-sha2 = head
+sha1 = "origin/#{base}"
+sha2 = "origin/#{head}"
 
 prev_sha1 = sha1
 
@@ -45,14 +45,8 @@ message.write "None\n" if migrations.empty?
 migrations.each { |m| message.write "#{m}\n" }
 
 message.flush
-
 message.rewind
 
 puts message.readlines
-puts
-output =  message.readlines
-puts output
 
 message.close
-puts 'close'
-output

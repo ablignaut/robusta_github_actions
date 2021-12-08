@@ -1,4 +1,4 @@
-name: create-pr-from
+name: create-release-pr-from
 
 on:
   workflow_dispatch:
@@ -10,9 +10,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-#      - uses: actions/setup-ruby@v1
-#        with:
-#          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
       - name: create tag
         uses: anothrNick/github-tag-action@1.36.0
@@ -25,10 +22,14 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
-#      - name: compile Pull Request
-#        id: compile_pr
-#        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
-#        run: ruby ./script/create-pr
+      - name: compile pull request
+        id: compile_pr
+        run: |
+          output=$(ruby ./script/create-pr) 
+          output="${output//'%'/'%25'}"
+          output="${output//$'\n'/'%0A'}"
+          output="${output//$'\r'/'%0D'}" 
+          echo "::set-output name=pr_body::$output"
 
       - name: create pull request | edge to next
         if: ${{ github.ref == 'refs/heads/edge' }}
@@ -36,8 +37,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-#          body: ${{ steps.compile_pr.output }}
-          body: "**Automated pull request**"
+          body: ${{ steps.compile_pr.outputs.pr_body }}
           get_diff: false
           source_branch: edge
           target_branch: next
@@ -49,8 +49,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }}.staging | Release [Staging]
-#          body: ${{ steps.compile_pr.output }}
-          body: "**Automated pull request**"
+          body: ${{ steps.compile_pr.outputs.pr_body }}
           get_diff: false
           source_branch: next
           target_branch: staging
@@ -62,8 +61,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
-#          body: ${{ steps.compile_pr.output }}
-          body: "**Automated pull request**"
+          body: ${{ steps.compile_pr.outputs.pr_body }}
           get_diff: false
           source_branch: staging
           target_branch: prod
