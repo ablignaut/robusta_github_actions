@@ -12,16 +12,15 @@ jobs:
           fetch-depth: '0'
 
       - name: create tag
-        uses: FritzViljoen/github-tag-action@1.36.1
+        uses: mathieudutour/github-tag-action@v6.0
         id: create_tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod,staging
-          PRERELEASE_SUFFIX: rc
-          WITH_V: true
-          DRY_RUN: true
-          CURRENT_BRANCH: staging
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_sha: staging
+          default_bump: major
+          release_branches: prod,staging
+          append_to_pre_release_tag: rc
+          dry_run: true
 
       - name: compile pull request
         id: compile_pr
