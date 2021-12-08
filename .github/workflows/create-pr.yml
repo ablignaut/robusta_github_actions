@@ -1,4 +1,4 @@
-name: create-pr-to
+name: create-pr-from
 
 on:
   workflow_dispatch:
@@ -14,24 +14,24 @@ jobs:
 #        with:
 #          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
-      - name: create Tag
+      - name: create tag
         uses: anothrNick/github-tag-action@1.36.0
         id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod,staging
+          RELEASE_BRANCHES: prod,staging,next
           PRERELEASE_SUFFIX: rc
           WITH_V: true
           DRY_RUN: true
 
 #      - name: compile Pull Request
 #        id: compile_pr
-##        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
+#        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
 #        run: ruby ./script/create-pr
 
-      - name: Create Pull Request | Edge to Next
-        if: ${{ github.ref == 'refs/heads/next' }}
+      - name: create pull request | edge to next
+        if: ${{ github.ref == 'refs/heads/edge' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -43,12 +43,12 @@ jobs:
           target_branch: next
           label: github-action
 
-      - name: Create Pull Request | Next to Staging
-        if: ${{ github.ref == 'refs/heads/staging' }}
+      - name: create pull request | next to staging
+        if: ${{ github.ref == 'refs/heads/next' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Staging]
+          title: ${{ steps.create_tag.outputs.new_tag }}.staging | Release [Staging]
 #          body: ${{ steps.compile_pr.output }}
           body: "**Automated pull request**"
           get_diff: false
@@ -56,8 +56,8 @@ jobs:
           target_branch: staging
           label: github-action
 
-      - name: Create Pull Request | Staging to Prod
-        if: ${{ github.ref == 'refs/heads/prod' }}
+      - name: create pull request | staging to prod
+        if: ${{ github.ref == 'refs/heads/staging' }}
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
