@@ -24,19 +24,15 @@ jobs:
           echo $tag
           echo "::set-output name=tag::$tag"
 
-      - name: create tag
-        uses: FritzViljoen/github-tag-action@1.36.1
-        id: create_tag
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ steps.get_tag.outputs.tag }}
-
-      - name: create release
-        uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.create_tag.outputs.new_tag }}
-          name: ${{ steps.create_tag.outputs.new_tag }} | Release [prod]
-          generateReleaseNotes: false
+          tag_name: ${{ steps.get_tag.outputs.tag }}
+          release_name: ${{ steps.get_tag.outputs.tag }} | Release [prod]
           body: ${{ github.event.pull_request.body }}
+          draft: false
           prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+
