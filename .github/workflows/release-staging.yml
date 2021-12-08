@@ -18,7 +18,7 @@ jobs:
           fetch-depth: '0'
 
       - name: current tag
-        uses: FritzViljoen/github-tag-action@1.36.0
+        uses: FritzViljoen/github-tag-action@1.36.1
         id: current_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,17 +29,17 @@ jobs:
           DRY_RUN: true
 
       - name: create tag
-        uses: FritzViljoen/github-tag-action@1.36.0
+        uses: FritzViljoen/github-tag-action@1.36.1
         id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ steps.current_tag.outputs.new_tag }}.${ GITHUB_REF##*/ }
+          CUSTOM_TAG: ${{ steps.current_tag.outputs.new_tag }}.${{ GITHUB_REF##*/ }}
 
       - name: create release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}
-          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${ GITHUB_REF##*/ }]
+          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ GITHUB_REF##*/ }}]
           generateReleaseNotes: false
           body: ${{ github.event.pull_request.body }}
           prerelease: true
