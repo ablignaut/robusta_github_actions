@@ -18,7 +18,6 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git status
-          git tag
           git describe
           git log --oneline edge..next | grep Merge | awk -F' ' '{print $1,$5}'
 #      - uses: actions/setup-ruby@v1
