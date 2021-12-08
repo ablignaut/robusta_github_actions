@@ -17,23 +17,38 @@ jobs:
         with:
           fetch-depth: '0'
 
-      - name: create tag
-        uses: FritzViljoen/github-tag-action@1.36.0
-        id: create_tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod,staging
-          PRERELEASE_SUFFIX: rc
-          WITH_V: true
+      - name: get tag
+        id: get_tag
+        run: |
+          tag=$(echo "${{ github.event.pull_request.title }}" | cut -d' ' -f 1)
+          echo $tag
+          echo "::set-output name=tag::$tag"
+
+#      - name: create tag
+#        uses: FritzViljoen/github-tag-action@1.36.1
+#        id: create_tag
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          CUSTOM_TAG: ${{ steps.get_tag.outputs.tag }}
+
+#      - name: create release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: ${{ steps.create_tag.outputs.new_tag }}
+#          name: ${{ steps.create_tag.outputs.new_tag }} | Release [next]
+#          generateReleaseNotes: false
+#          body: ${{ github.event.pull_request.body }}
+#          prerelease: true
+#          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: create release
-        uses: ncipollo/release-action@v1
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag: ${{ steps.create_tag.outputs.new_tag }}
-          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${ GITHUB_REF##*/ }]
-          generateReleaseNotes: false
+          tag_name: ${{ steps.get_tag.outputs.tag }}
+          release_name: ${{ steps.get_tag.outputs.tag }} | Release [next]
           body: ${{ github.event.pull_request.body }}
+          draft: false
           prerelease: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-
