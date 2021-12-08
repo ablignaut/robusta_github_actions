@@ -24,7 +24,9 @@ jobs:
 
       - name: compile pull request
         id: compile_pr
-        run: ruby ./script/create-pr
+        run: |
+          output=$(ruby ./script/create-pr) 
+          echo "::set-output name=pr_body::$output"
 
       - name: create pull request | edge to next
         if: ${{ github.ref == 'refs/heads/edge' }}

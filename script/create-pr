@@ -48,7 +48,5 @@ message.flush
 message.rewind
 
 puts message.readlines
-# %x(gh pr create -F #{message.path} -B #{base} -H #{head} -t '#{pr_title}' -w)
-%x(echo ::set-output name=pr_body::"#{message.readlines}")
 
 message.close
