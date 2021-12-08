@@ -1,12 +1,7 @@
 name: create-pr-next-staging
 
 on:
-  pull_request:
-    types:
-      - closed
-      - labeled
-    branches:
-      - next
+  workflow_dispatch:
 
 jobs:
   build:
