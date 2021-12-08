@@ -25,10 +25,9 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
-#      - name: compile pull request
-#        id: compile_pr
-#        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
-#        run: ruby ./script/create-pr
+      - name: compile pull request
+        id: compile_pr
+        run: ruby ./script/create-pr
 
       - name: create pull request | edge to next
         if: ${{ github.ref == 'refs/heads/edge' }}
@@ -36,8 +35,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-#          body: ${{ steps.compile_pr.output }}
-          body: "**Automated pull request**"
+          body: ${{ steps.compile_pr.output }}
           get_diff: false
           source_branch: edge
           target_branch: next
@@ -49,8 +47,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }}.staging | Release [Staging]
-#          body: ${{ steps.compile_pr.output }}
-          body: "**Automated pull request**"
+          body: ${{ steps.compile_pr.output }}
           get_diff: false
           source_branch: next
           target_branch: staging
@@ -62,8 +59,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
-#          body: ${{ steps.compile_pr.output }}
-          body: "**Automated pull request**"
+          body: ${{ steps.compile_pr.output }}
           get_diff: false
           source_branch: staging
           target_branch: prod
