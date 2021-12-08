@@ -2,7 +2,9 @@ name: release-staging
 
 on:
   pull_request:
-    types: closed
+    types:
+      - closed
+      - labeled
     branches:
       - staging
 
