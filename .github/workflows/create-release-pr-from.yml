@@ -14,7 +14,7 @@ jobs:
       - name: context
         id: context
         run: |
-          case github.ref in
+          case ${{ github.ref }} in
           'refs/heads/edge')
             echo "::set-output name=base::'next'"
             echo "::set-output name=head::'edge'"
