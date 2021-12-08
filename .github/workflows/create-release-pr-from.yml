@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
           RELEASE_BRANCHES: prod,staging
-          SOURCE: ${{ steps.context.outputs.base }}
+          SOURCE: refs/heads/next
           PRERELEASE_SUFFIX: rc
           WITH_V: true
           DRY_RUN: true
@@ -59,7 +59,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ steps.context.outputs.base }}]
           body: ${{ steps.compile_pr.outputs.pr_body }}
-          get_diff: false
           source_branch: ${{ steps.context.outputs.head }}
           target_branch: ${{ steps.context.outputs.base }}
           label: github-action
