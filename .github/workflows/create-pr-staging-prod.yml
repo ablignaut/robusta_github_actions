@@ -1,12 +1,7 @@
 name: create-pr-staging-prod
 
 on:
-  pull_request:
-    types:
-      - closed
-      - labeled
-    branches:
-      - staging
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,16 +13,16 @@ jobs:
           fetch-depth: '0'
 
       - name: create tag
-        uses: anothrNick/github-tag-action@1.36.0
+        uses: FritzViljoen/github-tag-action@1.36.0
         id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
           RELEASE_BRANCHES: prod,staging
-          SOURCE: refs/heads/next
           PRERELEASE_SUFFIX: rc
           WITH_V: true
           DRY_RUN: true
+          CURRENT_BRANCH: prod
 
       - name: compile pull request
         id: compile_pr
