@@ -32,7 +32,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
-          body: ${{ steps.compile_pr.output }}
+          body: ${{ ruby ./script/create-pr next edge }}
           get_diff: false
           source_branch: edge
           target_branch: next
@@ -44,7 +44,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }}.staging | Release [Staging]
-          body: ${{ steps.compile_pr.output }}
+          body: ${{ ruby ./script/create-pr staging next }}
           get_diff: false
           source_branch: next
           target_branch: staging
@@ -56,7 +56,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
-          body: ${{ steps.compile_pr.output }}
+          body: ${{ ruby ./script/create-pr prod staging }}
           get_diff: false
           source_branch: staging
           target_branch: prod
