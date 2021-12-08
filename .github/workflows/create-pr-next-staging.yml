@@ -3,6 +3,11 @@ name: create-pr-next-staging
 on:
   workflow_dispatch:
 
+  # Allows external webhook trigger
+  repository_dispatch:
+    types:
+      - create-pr-next-staging
+
 jobs:
   build:
     runs-on: ubuntu-latest
