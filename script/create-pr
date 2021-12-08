@@ -19,7 +19,7 @@ migrations = []
 pull_requests.reverse.each do |pr|
   sha1, num = pr.split(' ')
 
-  jira_pr = `git show --format=medium #{sha1}`.scrub.strip
+  jira_pr = `git show --format=medium origin/#{sha1}`.scrub.strip
   matches = jira_pr.split("\n").last.match(/(RPLUS|FEATURE)[\s-]([^\s]+)([\s\|]+)(.+)/i)
 
   next unless matches
@@ -27,7 +27,7 @@ pull_requests.reverse.each do |pr|
   jira    = "RPLUS-#{matches[2]}"
   desc    = matches[4].strip
 
-  commits = `git diff --name-only #{sha1} #{prev_sha1} | grep migrate`.split(/\n/)
+  commits = `git diff --name-only origin/#{sha1} origin/#{prev_sha1} | grep migrate`.split(/\n/)
   has_migrations = commits.length > 0
   migrations << "#{sha1}\t#{num}\t#{commits.length} migration(s)" if has_migrations
 
