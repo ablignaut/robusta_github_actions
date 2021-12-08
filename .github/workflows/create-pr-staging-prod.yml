@@ -1,12 +1,7 @@
 name: create-pr-staging-prod
 
 on:
-  pull_request:
-    types:
-      - closed
-      - labeled
-    branches:
-      - staging
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,7 +19,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: major
           RELEASE_BRANCHES: prod,staging
-          SOURCE: refs/heads/next
           PRERELEASE_SUFFIX: rc
           WITH_V: true
           DRY_RUN: true

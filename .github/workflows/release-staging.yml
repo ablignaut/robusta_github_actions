@@ -33,13 +33,13 @@ jobs:
         id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ steps.current_tag.outputs.new_tag }}.${{ github.base_ref }}
+          CUSTOM_TAG: ${{ steps.current_tag.outputs.new_tag }}.${ GITHUB_REF##*/ }
 
       - name: create release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.create_tag.outputs.new_tag }}
-          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ github.base_ref }}]
+          name: ${{ steps.create_tag.outputs.new_tag }} | Release [${ GITHUB_REF##*/ }]
           generateReleaseNotes: false
           body: ${{ github.event.pull_request.body }}
           prerelease: true
