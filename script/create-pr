@@ -45,14 +45,11 @@ message.write "None\n" if migrations.empty?
 migrations.each { |m| message.write "#{m}\n" }
 
 message.flush
-
 message.rewind
 
 puts message.readlines
-puts
 output =  message.readlines
-puts output
 
 message.close
-puts 'close'
+
 output
