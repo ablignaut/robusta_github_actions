@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Git checkout
+      - name: git checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
@@ -17,14 +17,15 @@ jobs:
           git --version
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
+          git log --oneline origin/edge..origin/next | grep Merge | awk -F' ' '{print $1,$5}'
+          
 
-          git log --oneline edge..next | grep Merge | awk -F' ' '{print $1,$5}'
 #      - uses: actions/setup-ruby@v1
 #        with:
 #          ruby-version: '2.6' # Version range or exact version of a Ruby version to use, using semvers version range syntax.
 
 
-      - name: compile Pull Request
+      - name: compile pull request
         id: compile_pr
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
         run: ruby ./script/create-pr

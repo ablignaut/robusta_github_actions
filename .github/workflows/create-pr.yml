@@ -25,7 +25,7 @@ jobs:
           WITH_V: true
           DRY_RUN: true
 
-#      - name: compile Pull Request
+#      - name: compile pull request
 #        id: compile_pr
 #        run: ruby ./script/create-pr ${{ steps.create_tag.outputs.new_tag }}
 #        run: ruby ./script/create-pr
