@@ -16,16 +16,16 @@ jobs:
         run: |
           case ${{ github.ref }} in
           'refs/heads/edge')
-            echo "::set-output name=base::'next'"
-            echo "::set-output name=head::'edge'"
+            echo "::set-output name=base::next"
+            echo "::set-output name=head::edge"
           ;;
           'refs/heads/next')
-            echo "::set-output name=base::'staging'"
-            echo "::set-output name=head::'next'"
+            echo "::set-output name=base::staging"
+            echo "::set-output name=head::next"
           ;;
           'refs/heads/staging')
-            echo "::set-output name=base::'prod'"
-            echo "::set-output name=head::'staging'"
+            echo "::set-output name=base::prod"
+            echo "::set-output name=head::staging"
           ;;
           *) 
             echo "Invalid option!" && exit 1
