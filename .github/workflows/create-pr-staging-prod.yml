@@ -1,0 +1,49 @@
+name: create-pr-staging-prod
+
+on:
+  pull_request:
+    types:
+      - closed
+      - labeled
+    branches:
+      - staging
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true && contains( github.event.pull_request.labels.*.name, 'github-action')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: create tag
+        uses: anothrNick/github-tag-action@1.36.0
+        id: create_tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: major
+          RELEASE_BRANCHES: prod,staging
+          SOURCE: refs/heads/next
+          PRERELEASE_SUFFIX: rc
+          WITH_V: true
+          DRY_RUN: true
+
+      - name: compile pull request
+        id: compile_pr
+        run: |
+          output=$(ruby ./script/create-pr prod staging) 
+          output="${output//'%'/'%25'}"
+          output="${output//$'\n'/'%0A'}"
+          output="${output//$'\r'/'%0D'}" 
+          echo "::set-output name=pr_body::$output"
+
+      - name: create pull request
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [prod]
+          body: ${{ steps.compile_pr.outputs.pr_body }}
+          source_branch: staging
+          target_branch: prod
+          label: github-action
