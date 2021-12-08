@@ -37,9 +37,11 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
 #          body: ${{ steps.compile_pr.output }}
+          body: "**Automated pull request**"
           get_diff: false
           source_branch: edge
           target_branch: next
+          label: github-action
 
       - name: Create Pull Request | Next to Staging
         if: ${{ github.ref == 'refs/heads/staging' }}
@@ -48,9 +50,11 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Staging]
 #          body: ${{ steps.compile_pr.output }}
+          body: "**Automated pull request**"
           get_diff: false
           source_branch: next
           target_branch: staging
+          label: github-action
 
       - name: Create Pull Request | Staging to Prod
         if: ${{ github.ref == 'refs/heads/prod' }}
@@ -59,6 +63,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
 #          body: ${{ steps.compile_pr.output }}
+          body: "**Automated pull request**"
           get_diff: false
           source_branch: staging
           target_branch: prod
+          label: github-action
