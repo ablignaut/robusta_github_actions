@@ -18,7 +18,9 @@ jobs:
           fetch-depth: '0'
 
       - run: |
-          echo "::set-output name=tag::"${{ github.event.pull_request.title }}" | cut -d' ' -f 1
+          tag="${{ github.event.pull_request.title }}" | cut -d' ' -f 1
+          echo @tag
+          echo "::set-output name=tag::$tag"
 
       - name: create tag
         uses: FritzViljoen/github-tag-action@1.36.1
