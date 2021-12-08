@@ -11,6 +11,16 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: context
+        id: context
+        run:
+          case github.ref in
+          'refs/heads/edge')    echo "::set-output name=base::'next'    name=head::'edge'" ;;
+          'refs/heads/next')    echo "::set-output name=base::'staging' name=head::'next'" ;;
+          'refs/heads/staging') echo "::set-output name=base::'prod'    name=head::'staging'" ;;
+          *) Default condition to be executed ;;
+          esac
+
       - name: create tag
         uses: anothrNick/github-tag-action@1.36.0
         id: create_tag
@@ -25,44 +35,19 @@ jobs:
       - name: compile pull request
         id: compile_pr
         run: |
-          output=$(ruby ./script/create-pr) 
+          output=$(ruby ./script/create-pr ${{ steps.context.outputs.base }} ${{ steps.context.outputs.head }}) 
           output="${output//'%'/'%25'}"
           output="${output//$'\n'/'%0A'}"
           output="${output//$'\r'/'%0D'}" 
           echo "::set-output name=pr_body::$output"
 
-      - name: create pull request | edge to next
-        if: ${{ github.ref == 'refs/heads/edge' }}
+      - name: create pull request
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Next]
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [${{ steps.context.outputs.base }}]
           body: ${{ steps.compile_pr.outputs.pr_body }}
           get_diff: false
-          source_branch: edge
-          target_branch: next
-          label: github-action
-
-      - name: create pull request | next to staging
-        if: ${{ github.ref == 'refs/heads/next' }}
-        uses: devops-infra/action-pull-request@v0.4.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }}.staging | Release [Staging]
-          body: ${{ steps.compile_pr.outputs.pr_body }}
-          get_diff: false
-          source_branch: next
-          target_branch: staging
-          label: github-action
-
-      - name: create pull request | staging to prod
-        if: ${{ github.ref == 'refs/heads/staging' }}
-        uses: devops-infra/action-pull-request@v0.4.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }} | Release [Prod]
-          body: ${{ steps.compile_pr.outputs.pr_body }}
-          get_diff: false
-          source_branch: staging
-          target_branch: prod
+          source_branch: ${{ steps.context.outputs.head }}
+          target_branch: ${{ steps.context.outputs.base }}
           label: github-action
