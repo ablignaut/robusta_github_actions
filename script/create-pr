@@ -3,8 +3,8 @@
 # requires the github cli https://cli.github.com/manual/
 require 'tempfile'
 
-base = "origin/ #{ARGV[0] || 'next'}"
-head = "origin/ #{ARGV[1] || 'edge'}"
+base = "origin/#{ARGV[0] || 'next'}"
+head = "origin/#{ARGV[1] || 'edge'}"
 
 sha1 = base
 sha2 = head
