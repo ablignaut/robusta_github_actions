@@ -28,7 +28,6 @@ jobs:
           DRY_RUN: true
           CURRENT_BRANCH: staging
 
-      if: ${{ steps.create_tag.outputs.new_tag }} != ""
       - name: compile pull request
         id: compile_pr
         run: |
