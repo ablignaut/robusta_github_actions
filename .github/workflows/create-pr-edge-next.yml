@@ -25,8 +25,10 @@ jobs:
           git fetch --tags
           
           # get latest tag that looks like a semver (with or without v)
-          tag=$(git tag --list --merged HEAD --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | head -n1)
-          pre_tag=$(git tag --list --merged HEAD --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+(-$suffix\.[0-9]+)?$" | head -n1)
+          tag=$(git tag --list --merged prod --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | head -n1)
+          echo found Tag $tag
+          pre_tag=$(git tag --list --merged prod --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+(-$suffix\.[0-9]+)?$" | head -n1)
+          echo found Pre-release Tag $pre_tag
           
           # get current commit hash for tag
           tag_commit=$(git rev-list -n 1 $tag)
@@ -42,14 +44,23 @@ jobs:
           fi
         
           # bump version
-          # new=$(semver -i major $tag)
-
-          pre_release="true"
-          echo "pre_release = $pre_release"
+          default_semvar_bump=none
           
-          if $pre_release then
+          if [ "$default_semvar_bump" == "none" ]
+          then
+            echo "Default bump was set to none. Skipping..."; echo ::set-output name=new_tag::$tag; exit 0
+          else
+            new=$(semver -i "${default_semvar_bump}" $tag)
+          fi
+        
+          pre_release="true"
+          echo "Pre-release = $pre_release"
+          
+          if $pre_release 
+          then
             # Already a prerelease available, bump it
-            if [[ "$pre_tag" == *"$new"* ]]; then
+            if [[ "$pre_tag" == *"$new"* ]]
+            then
               new=$(semver -i prerelease $pre_tag --preid $suffix); 
             else
               new="$new-$suffix.1"; 
