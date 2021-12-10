@@ -17,20 +17,55 @@ jobs:
           fetch-depth: '0'
 
       - name: create tag
-        uses: FritzViljoen/github-tag-action@1.36.1
         id: create_tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: major
-          RELEASE_BRANCHES: prod,staging
-          PRERELEASE_SUFFIX: rc
-          WITH_V: true
-          DRY_RUN: true
-          CURRENT_BRANCH: next
+        run: |
+          suffix=rc
+
+          # fetch tags
+          git fetch --tags
+          
+          # get latest tag that looks like a semver (with or without v)
+          tag=$(git tag --list --merged HEAD --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | head -n1)
+          pre_tag=$(git tag --list --merged HEAD --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+(-$suffix\.[0-9]+)?$" | head -n1)
+          
+          # get current commit hash for tag
+          tag_commit=$(git rev-list -n 1 $tag)
+          
+          # get current commit hash
+          commit=$(git rev-parse HEAD)
+          
+          if [ "$tag_commit" == "$commit" ]
+          then
+            echo "No new commits since previous tag. Skipping..."
+            echo ::set-output name=tag::$tag
+            exit 0
+          fi
+        
+          # bump version
+          # new=$(semver -i major $tag)
+
+          pre_release="true"
+          echo "pre_release = $pre_release"
+          
+          if $pre_release then
+            # Already a prerelease available, bump it
+            if [[ "$pre_tag" == *"$new"* ]]; then
+              new=$(semver -i prerelease $pre_tag --preid $suffix); 
+            else
+              new="$new-$suffix.1"; 
+            fi
+          fi
+
+          # prefix with 'v'
+          new="v$new"
+          
+          # set outputs
+          echo ::set-output name=new_tag::$new
 
       - name: compile pull request
         id: compile_pr
         run: |
+          
           output=$(ruby ./script/create-pr next edge) 
           output="${output//'%'/'%25'}"
           output="${output//$'\n'/'%0A'}"
