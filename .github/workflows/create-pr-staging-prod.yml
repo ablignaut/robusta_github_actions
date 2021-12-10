@@ -16,6 +16,10 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: set enviroment
+        run: |
+          npm install -g semver
+
       - name: create tag
         id: create_tag
         run: |
