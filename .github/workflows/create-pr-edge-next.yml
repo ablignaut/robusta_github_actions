@@ -34,16 +34,15 @@ jobs:
           # get current commit hash
           commit=$(git rev-parse HEAD)
           
-          if [ "$tag_commit" == "$commit" ]; then
+          if [ "$tag_commit" == "$commit" ]
+          then
             echo "No new commits since previous tag. Skipping..."
-            echo ::set-output name=tag::$tag
+#            echo ::set-output name=tag::$tag
             exit 0
           fi
         
           # bump version
-          # new=$(semver -i major $tag); part="major"
-          # new=$(semver -i minor $tag); part="minor"
-          # new=$(semver -i patch $tag); part="patch"
+          # new=$(semver -i major $tag)
 
           pre_release="true"
           echo "pre_release = $pre_release"
@@ -51,9 +50,9 @@ jobs:
           if $pre_release then
             # Already a prerelease available, bump it
             if [[ "$pre_tag" == *"$new"* ]]; then
-              new=$(semver -i prerelease $pre_tag --preid $suffix); part="pre-$part"
+              new=$(semver -i prerelease $pre_tag --preid $suffix); 
             else
-              new="$new-$suffix.1"; part="pre-$part"
+              new="$new-$suffix.1"; 
             fi
           fi
 
