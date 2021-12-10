@@ -23,7 +23,6 @@ jobs:
       - name: create tag
         id: create_tag
         run: |
-
           # config
           default_semvar_bump=major
           
