@@ -92,7 +92,7 @@ jobs:
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          title: ${{ steps.create_tag.outputs.new_tag }}.staging | Release [staging]
+          title: ${{ steps.create_tag.outputs.new_tag }} | Release [staging]
           body: ${{ steps.compile_pr.outputs.pr_body }}
           source_branch: next
           target_branch: staging
