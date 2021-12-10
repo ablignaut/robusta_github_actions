@@ -25,9 +25,9 @@ jobs:
           git fetch --tags
           
           # get latest tag that looks like a semver (with or without v)
-          tag=$(git tag --list --merged prod --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | head -n1)
+          tag=$(git tag --list --merged origin/prod --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+$" | head -n1)
           echo found Tag $tag
-          pre_tag=$(git tag --list --merged prod --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+(-$suffix\.[0-9]+)?$" | head -n1)
+          pre_tag=$(git tag --list --merged origin/prod --sort=-v:refname | grep -E "^v?[0-9]+\.[0-9]+\.[0-9]+(-$suffix\.[0-9]+)?$" | head -n1)
           echo found Pre-release Tag $pre_tag
           
           # get current commit hash for tag
