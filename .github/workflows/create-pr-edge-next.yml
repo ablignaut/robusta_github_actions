@@ -16,10 +16,13 @@ jobs:
         with:
           fetch-depth: '0'
 
+      - name: set enviroment
+        run: |
+          apk update && apk add bash git curl jq && apk add --update nodejs npm && npm install -g semver
+
       - name: create tag
         id: create_tag
         run: |
-          npm install semver
           # config
           suffix=rc
           pre_release=true
