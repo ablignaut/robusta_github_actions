@@ -21,6 +21,7 @@ jobs:
           npm install -g semver
 
       - name: create tag
+        # copied from anothrNick/github-tag-action@1.36.0
         id: create_tag
         run: |
           # config
