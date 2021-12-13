@@ -82,7 +82,7 @@ jobs:
       - name: compile pull request
         id: compile_pr
         run: |
-          output=$(ruby ./script/create-pr staging next) 
+          output=$(ruby ./script/create-github-pr staging next) 
           output="${output//'%'/'%25'}"
           output="${output//$'\n'/'%0A'}"
           output="${output//$'\r'/'%0D'}" 
