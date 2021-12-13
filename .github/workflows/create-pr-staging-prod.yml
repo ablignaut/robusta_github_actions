@@ -21,6 +21,7 @@ jobs:
           npm install -g semver
 
       - name: create tag
+        # copied from anothrNick/github-tag-action@1.36.0
         id: create_tag
         run: |
           # config
@@ -66,7 +67,7 @@ jobs:
       - name: compile pull request
         id: compile_pr
         run: |
-          output=$(ruby ./script/create-pr prod staging) 
+          output=$(ruby ./script/create-github-pr prod staging) 
           output="${output//'%'/'%25'}"
           output="${output//$'\n'/'%0A'}"
           output="${output//$'\r'/'%0D'}" 
